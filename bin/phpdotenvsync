@@ -1,0 +1,98 @@
+#!/usr/bin/env php
+<?php
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use Stefanocbt\PhpdotenvSync\Services\CliColoredMessagesService;
+use Stefanocbt\PhpdotenvSync\OperationsStaticReference;
+use Stefanocbt\PhpdotenvSync\Services\DotenvService;
+
+/**
+ * Setting command arguments/options
+ */
+$longOpts = [
+    'opt:', // required (the requested operation) (list operations: OperationsStaticReference.php)
+    'src::', // optional (the dotenv file source)
+    'dest::', // optional (the dotenv file destination)
+];
+
+$options = getopt(null, $longOpts);
+
+/**
+ * validating options
+ */
+if (empty($options)) {
+    CliColoredMessagesService::danger('invalid options provided.');
+    exit;
+}
+if (!in_array($options['opt'], OperationsStaticReference::OPT_DOTENV_REFERENCES)) {
+    CliColoredMessagesService::danger('the requested opt does not exists.');
+    exit;
+}
+
+/**
+ * setting src & dest parameters
+ */
+$src = $_SERVER['PWD'] . '/.env.example';
+$dest = $_SERVER['PWD'] . '/.env';
+if (!empty($options['src'])) {
+    $src = $options['src'];
+}
+if (!empty($options['dest'])) {
+    $dest = $options['dest'];
+}
+
+/**
+ * Running the requested opt
+ */
+$dotenvService = new DotenvService();
+
+switch ($options['opt']) {
+    case (OperationsStaticReference::OPT_DOTENV_CHECK_DIFF):
+        /**
+         * showing init infos
+         */
+        CliColoredMessagesService::success('Checking DIFF...');
+        CliColoredMessagesService::info('src: ' . $src);
+        CliColoredMessagesService::info('dest: ' . $dest);
+        echo PHP_EOL;
+
+        $diff = $dotenvService->getDotenvFilesDiff($src, $dest);
+
+        if (empty($diff)) {
+            CliColoredMessagesService::success('src and dest Dotenvs params are synced.');
+            break;
+        }
+
+        /**
+         * in this case the src Dotenv has more params than dest Dotenv
+         */
+        foreach ($diff as $missingParamName => $missingParamValue) {
+            $defaultValue = 'null';
+            if (!empty($missingParamValue)) {
+                $defaultValue = '"' . $missingParamValue . '"';
+            }
+
+            CliColoredMessagesService::warning('Missing param on dest Dotenv:');
+            CliColoredMessagesService::info($missingParamName . ' (default: ' . $defaultValue . ')');
+            echo PHP_EOL;
+        }
+
+        break;
+    case (OperationsStaticReference::OPT_DOTENV_SYNC):
+        /**
+         * showing init infos
+         */
+        CliColoredMessagesService::success('Executing SYNC...');
+        CliColoredMessagesService::info('src: ' . $src);
+        CliColoredMessagesService::info('dest: ' . $dest);
+        echo PHP_EOL;
+
+        // TODO: implementing...
+
+        CliColoredMessagesService::warning('syncing not implemented yet');
+        break;
+    default:
+        CliColoredMessagesService::danger('the requested opt does not exists. (fail)');
+        exit;
+}

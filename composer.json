@@ -1,0 +1,42 @@
+{
+    "name": "stefanocbt/phpdotenv-sync",
+    "description": "A package that makes sure that your .env file is in sync with your .env.example",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Stefano Ciabatta",
+            "email": "stefanocbt.github@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.3",
+        "vlucas/phpdotenv": "^5.2"
+    },
+    "require-dev": {
+        "mikey179/vfsstream": "^1.6",
+        "mockery/mockery": "^1.4",
+        "phpstan/phpstan": "^0.12.56",
+        "phpunit/phpunit": "^9.3",
+        "squizlabs/php_codesniffer": "^3.5",
+        "wapmorgan/php-code-fixer": "^2.0"
+    },
+    "bin": [
+        "bin/phpdotenvsync"
+    ],
+    "autoload": {
+        "psr-4": {
+            "Stefanocbt\\PhpdotenvSync\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
+    "minimum-stability": "stable"
+}

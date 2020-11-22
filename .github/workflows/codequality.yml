@@ -1,0 +1,29 @@
+name: Codequality
+
+on: push
+
+jobs:
+  build:
+    name: Codequality tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build
+        run: |
+          composer --version
+          composer install --no-interaction
+        env:
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Codequality tests
+        run: |
+          echo "PHPCS:"
+          php vendor/bin/phpcs --exclude=Generic.Files.LineEndings --standard=PSR12 -n -p src/
+          echo "PHPCF:"
+          php vendor/bin/phpcf --target 7.4 src/
+          echo "PHPSTAN:"
+          php vendor/bin/phpstan analyse -c phpstan.neon src/ --autoload-file=vendor/autoload.php --level=1
