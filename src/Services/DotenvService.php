@@ -10,8 +10,7 @@ class DotenvService
      * @param $fileSrc
      * @return bool
      */
-    protected function checkFileExists($fileSrc)
-    {
+    protected function checkFileExists($fileSrc) {
         return file_exists($fileSrc);
     }
 
