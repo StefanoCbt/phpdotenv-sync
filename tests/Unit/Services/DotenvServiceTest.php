@@ -48,7 +48,7 @@ class DotenvServiceTest extends TestCase
 
         $this->assertEquals(
             [
-                'PARAM_WITHOUT_DEFAULT' => '',
+                'PARAM_WITHOUT_DEFAULT' => '1',
                 'PARAM_WITH_DEFAULT' => 'random value',
             ],
             $this->dotenvService->getDotenvFilesDiff(
