@@ -22,9 +22,6 @@ class DotenvService
      */
     protected function parseDotenvFile($filePath)
     {
-        /**
-         * checking file exists before parsing
-         */
         if (!$this->checkFileExists($filePath)) {
             throw new \Exception('file ("' . $filePath . '") does not exists');
         }
@@ -42,19 +39,10 @@ class DotenvService
         string $srcPath,
         string $destPath
     ) {
-        /**
-         * loading srcDotenvParams
-         */
         $srcDotenvParams = $this->parseDotenvFile($srcPath);
 
-        /**
-         * loading destDotenvParams
-         */
         $destDotenvParams = $this->parseDotenvFile($destPath);
 
-        /**
-         * returning the diff
-         */
         return array_diff_key(
             $srcDotenvParams,
             $destDotenvParams
