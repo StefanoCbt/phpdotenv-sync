@@ -48,4 +48,9 @@ class DotenvService
             $destDotenvParams
         );
     }
+
+    public function addDotenvParam(string $paramName, string $paramValue, string $destPath)
+    {
+        // TODO...
+    }
 }
