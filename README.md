@@ -5,7 +5,7 @@
 A package that makes sure that your .env file is in sync with your .env.example
 
 ## Usage
-requiring the library with composer:
+adding the library to your project with composer:
 ```
 composer require stefanocbt/phpdotenv-sync
 ```
