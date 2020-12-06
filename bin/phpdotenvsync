@@ -6,6 +6,8 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use Stefanocbt\PhpdotenvSync\Services\CliColoredMessagesService;
 use Stefanocbt\PhpdotenvSync\OperationsStaticReference;
 use Stefanocbt\PhpdotenvSync\Services\DotenvService;
+use Stefanocbt\PhpdotenvSync\Services\OutputStringsService;
+use Stefanocbt\PhpdotenvSync\Services\CommandExecutorService;
 
 /**
  * Setting command arguments/options
@@ -68,13 +70,9 @@ switch ($options['opt']) {
          * in this case the src Dotenv has more params than dest Dotenv
          */
         foreach ($diff as $missingParamName => $missingParamValue) {
-            $defaultValue = 'null';
-            if (!empty($missingParamValue)) {
-                $defaultValue = '"' . $missingParamValue . '"';
-            }
-
             CliColoredMessagesService::warning('Missing param on dest Dotenv:');
-            CliColoredMessagesService::info($missingParamName . ' (default: ' . $defaultValue . ')');
+            CliColoredMessagesService::info(OutputStringsService::getMissingDotenvParamString($missingParamName, $missingParamValue));
+
             echo PHP_EOL;
         }
 
@@ -88,9 +86,54 @@ switch ($options['opt']) {
         CliColoredMessagesService::info('dest: ' . $dest);
         echo PHP_EOL;
 
-        // TODO: implementing...
+        $diff = $dotenvService->getDotenvFilesDiff($src, $dest);
 
-        CliColoredMessagesService::warning('syncing not implemented yet');
+        if (empty($diff)) {
+            CliColoredMessagesService::success('src and dest Dotenvs params are synced.');
+            break;
+        }
+
+        /**
+         * in this case the src Dotenv has more params than dest Dotenv
+         */
+        foreach ($diff as $missingParamName => $missingParamValue) {
+            /**
+             * asking action
+             */
+            $action = CommandExecutorService::askForDotenvParam($missingParamName, $missingParamValue);
+
+            if (!$action || $action == CommandExecutorService::ASK_DOTENV_PARAM_ACTION_SKIP) {
+                continue;
+            }
+
+            /**
+             * handling action
+             */
+            switch ($action) {
+                case (CommandExecutorService::ASK_DOTENV_PARAM_ACTION_COPY_DEFAULT_VALUE):
+                    $dotenvService->addDotenvParam(
+                        $missingParamName,
+                        $missingParamValue,
+                        $dest
+                    );
+                    CliColoredMessagesService::success('Added.');
+                    break;
+                case (CommandExecutorService::ASK_DOTENV_PARAM_ACTION_CHANGE_DEFAULT_VALUE):
+                    $newValue = CommandExecutorService::askForNewDotenvValue();
+                    $dotenvService->addDotenvParam(
+                        $missingParamName,
+                        $newValue,
+                        $dest
+                    );
+                    CliColoredMessagesService::success('Added with specified value.');
+                    break;
+            }
+
+            echo PHP_EOL;
+        }
+
+        echo PHP_EOL;
+        CliColoredMessagesService::success('Sync completed.');
         break;
     default:
         CliColoredMessagesService::danger('the requested opt does not exists. (fail)');

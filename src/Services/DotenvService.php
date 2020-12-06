@@ -48,4 +48,17 @@ class DotenvService
             $destDotenvParams
         );
     }
+
+    public function addDotenvParam(string $paramName, string $paramValue, string $destPath)
+    {
+        $dotenvParamLine = $paramName;
+
+        if (strlen($paramValue) <= 0) {
+            $dotenvParamLine .= '=';
+        } else {
+            $dotenvParamLine .= '="' . $paramValue . '"';
+        }
+
+        return file_put_contents($destPath, PHP_EOL . $dotenvParamLine, FILE_APPEND | LOCK_EX);
+    }
 }

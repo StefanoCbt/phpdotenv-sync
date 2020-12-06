@@ -14,6 +14,10 @@ TODO...
 ```
 php bin/phpdotenvsync --opt=check --src="./bin/dev_testing/.env.example" --dest="./bin/dev_testing/.env"
 ```
+#### testing SYNC command into development environment (execute from project root dir):
+```
+php bin/phpdotenvsync --opt=sync --src="./bin/dev_testing/.env.example" --dest="./bin/dev_testing/.env"
+```
 
 ## Codequality tests
 

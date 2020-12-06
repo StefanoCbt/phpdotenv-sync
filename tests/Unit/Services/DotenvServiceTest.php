@@ -25,6 +25,90 @@ class DotenvServiceTest extends TestCase
         m::close();
     }
 
+    public function testAddDotenvParam()
+    {
+        /**
+         * test1
+         */
+        $rootFilesystem = vfsStream::setup();
+
+        $destAbsoluteFilePath = $rootFilesystem->url() . '/.env';
+        $destFileContent = '';
+        $destFileContent .= 'APP_NAME="My App"' . PHP_EOL;
+        $destFileContent .= 'APP_DEBUG=true' . PHP_EOL;
+        file_put_contents($destAbsoluteFilePath, $destFileContent);
+
+        $this->dotenvService->addDotenvParam(
+            'TEST_PARAM1',
+            '0',
+            $destAbsoluteFilePath
+        );
+
+        $expected = '';
+        $expected .= 'APP_NAME="My App"' . PHP_EOL;
+        $expected .= 'APP_DEBUG=true' . PHP_EOL;
+        $expected .= PHP_EOL . 'TEST_PARAM1="0"';
+
+        $this->assertEquals(
+            $expected,
+            file_get_contents($destAbsoluteFilePath)
+        );
+
+        /**
+         * test2
+         */
+        $rootFilesystem = vfsStream::setup();
+
+        $destAbsoluteFilePath = $rootFilesystem->url() . '/.env';
+        $destFileContent = '';
+        $destFileContent .= 'APP_NAME="My App"' . PHP_EOL;
+        $destFileContent .= 'APP_DEBUG=true' . PHP_EOL;
+        file_put_contents($destAbsoluteFilePath, $destFileContent);
+
+        $this->dotenvService->addDotenvParam(
+            'TEST_PARAM1',
+            'test value 1',
+            $destAbsoluteFilePath
+        );
+
+        $expected = '';
+        $expected .= 'APP_NAME="My App"' . PHP_EOL;
+        $expected .= 'APP_DEBUG=true' . PHP_EOL;
+        $expected .= PHP_EOL . 'TEST_PARAM1="test value 1"';
+
+        $this->assertEquals(
+            $expected,
+            file_get_contents($destAbsoluteFilePath)
+        );
+
+        /**
+         * test3
+         */
+        $rootFilesystem = vfsStream::setup();
+
+        $destAbsoluteFilePath = $rootFilesystem->url() . '/.env';
+        $destFileContent = '';
+        $destFileContent .= 'APP_NAME="My App"' . PHP_EOL;
+        $destFileContent .= 'APP_DEBUG=true' . PHP_EOL;
+        file_put_contents($destAbsoluteFilePath, $destFileContent);
+
+        $this->dotenvService->addDotenvParam(
+            'TEST_PARAM1',
+            '',
+            $destAbsoluteFilePath
+        );
+
+        $expected = '';
+        $expected .= 'APP_NAME="My App"' . PHP_EOL;
+        $expected .= 'APP_DEBUG=true' . PHP_EOL;
+        $expected .= PHP_EOL . 'TEST_PARAM1=';
+
+        $this->assertEquals(
+            $expected,
+            file_get_contents($destAbsoluteFilePath)
+        );
+    }
+
     public function testGetDotenvFilesDiff()
     {
         /**
