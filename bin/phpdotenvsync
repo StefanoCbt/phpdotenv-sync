@@ -106,16 +106,30 @@ switch ($options['opt']) {
                 continue;
             }
 
-            var_dump('choose: ' . $action);
-            exit;
-
             /**
-             * exe
+             * handling action
              */
-            //$dotenvService->addParam();
+            switch ($action) {
+                case (CommandExecutorService::ASK_DOTENV_PARAM_ACTION_COPY_DEFAULT_VALUE):
+                    $dotenvService->addDotenvParam(
+                        $missingParamName,
+                        $missingParamValue,
+                        $dest
+                    );
+                    CliColoredMessagesService::success('Added.');
+                    break;
+                case (CommandExecutorService::ASK_DOTENV_PARAM_ACTION_CHANGE_DEFAULT_VALUE):
+                    $newValue = CommandExecutorService::askForNewDotenvValue();
+                    $dotenvService->addDotenvParam(
+                        $missingParamName,
+                        $newValue,
+                        $dest
+                    );
+                    CliColoredMessagesService::success('Added with specified value.');
+                    break;
+            }
 
             echo PHP_EOL;
-
         }
 
         echo PHP_EOL;

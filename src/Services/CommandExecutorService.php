@@ -15,6 +15,24 @@ class CommandExecutorService
     ];
 
     /**
+     * @return string
+     */
+    public static function askForNewDotenvValue()
+    {
+        $question = 'Insert the new value:';
+
+        CliColoredMessagesService::success($question);
+
+        $handle = fopen("php://stdin", "r");
+
+        $line = strtolower(trim(fgets($handle)));
+
+        fclose($handle);
+
+        return $line;
+    }
+
+    /**
      * @param string $paramName
      * @param string|null $defaultValue
      * @return false|string

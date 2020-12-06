@@ -51,6 +51,14 @@ class DotenvService
 
     public function addDotenvParam(string $paramName, string $paramValue, string $destPath)
     {
-        // TODO...
+        $dotenvParamLine = $paramName;
+
+        if (empty($paramValue)) {
+            $dotenvParamLine .= '=';
+        } else {
+            $dotenvParamLine .= '="' . $paramValue . '"';
+        }
+
+        return file_put_contents($destPath, PHP_EOL . $dotenvParamLine, FILE_APPEND | LOCK_EX);
     }
 }
