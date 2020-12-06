@@ -53,7 +53,7 @@ class DotenvService
     {
         $dotenvParamLine = $paramName;
 
-        if (empty($paramValue)) {
+        if (strlen($paramValue) <= 0) {
             $dotenvParamLine .= '=';
         } else {
             $dotenvParamLine .= '="' . $paramValue . '"';

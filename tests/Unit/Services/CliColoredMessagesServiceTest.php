@@ -21,6 +21,19 @@ class CliColoredMessagesServiceTest extends TestCase
     /**
      * @dataProvider generalSameStringsProvider
      */
+    public function testInfoWithoutNewline(
+        $expected,
+        string $message
+    )
+    {
+        $this->expectOutputString($expected);
+
+        CliColoredMessagesService::info($message, false);
+    }
+
+    /**
+     * @dataProvider generalSameStringsProvider
+     */
     public function testInfo(
         $expected,
         string $message
@@ -29,6 +42,19 @@ class CliColoredMessagesServiceTest extends TestCase
         $this->expectOutputString($expected . PHP_EOL);
 
         CliColoredMessagesService::info($message);
+    }
+
+    /**
+     * @dataProvider generalSameStringsProvider
+     */
+    public function testDangerWithoutNewline(
+        $expected,
+        string $message
+    )
+    {
+        $this->expectOutputString("\033[31m$expected\033[0m");
+
+        CliColoredMessagesService::danger($message, false);
     }
 
     /**
@@ -47,6 +73,19 @@ class CliColoredMessagesServiceTest extends TestCase
     /**
      * @dataProvider generalSameStringsProvider
      */
+    public function testWarningWithoutNewline(
+        $expected,
+        string $message
+    )
+    {
+        $this->expectOutputString("\033[0;33m$expected\033[0m");
+
+        CliColoredMessagesService::warning($message, false);
+    }
+
+    /**
+     * @dataProvider generalSameStringsProvider
+     */
     public function testWarning(
         $expected,
         string $message
@@ -55,6 +94,19 @@ class CliColoredMessagesServiceTest extends TestCase
         $this->expectOutputString("\033[0;33m$expected\033[0m" . PHP_EOL);
 
         CliColoredMessagesService::warning($message);
+    }
+
+    /**
+     * @dataProvider generalSameStringsProvider
+     */
+    public function testSuccessWithoutNewline(
+        $expected,
+        string $message
+    )
+    {
+        $this->expectOutputString("\033[32m$expected\033[0m");
+
+        CliColoredMessagesService::success($message, false);
     }
 
     /**
