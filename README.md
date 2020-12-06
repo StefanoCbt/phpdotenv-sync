@@ -6,7 +6,7 @@ A package that makes sure that your .env file is in sync with your .env.example
 
 ## Usage
 ```
-TODO...
+
 ```
 
 ## Development
