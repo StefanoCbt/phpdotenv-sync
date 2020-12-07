@@ -1,8 +1,6 @@
 #!/usr/bin/env php
 <?php
 
-require_once __DIR__ . '/../vendor/autoload.php';
-
 use Stefanocbt\PhpdotenvSync\Services\CliColoredMessagesService;
 use Stefanocbt\PhpdotenvSync\OperationsStaticReference;
 use Stefanocbt\PhpdotenvSync\Services\DotenvService;
