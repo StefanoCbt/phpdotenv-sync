@@ -1,6 +1,33 @@
 #!/usr/bin/env php
 <?php
 
+/**
+ * loading composer
+ */
+$composerAutoloaderPaths = [
+    __DIR__ . '/../vendor/autoload.php',
+    __DIR__ . '/../autoload.php'
+];
+$composerPath = false;
+
+foreach ($composerAutoloaderPaths as $composerAutoloaderPath) {
+    if (!file_exists($composerAutoloaderPath)) {
+        continue;
+    }
+
+    $composerPath = $composerAutoloaderPath;
+    break;
+}
+
+if (empty($composerPath)) {
+    die('Fatal Error: Unable to load composer autoloader.');
+}
+
+require_once $composerPath;
+
+/**
+ * Start
+ */
 use Stefanocbt\PhpdotenvSync\Services\CliColoredMessagesService;
 use Stefanocbt\PhpdotenvSync\OperationsStaticReference;
 use Stefanocbt\PhpdotenvSync\Services\DotenvService;
