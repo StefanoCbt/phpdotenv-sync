@@ -22,6 +22,12 @@ Options:
     --opt[=OPT]               Specify the right operation (Required) ("check" or "sync")
     --src[=SOURCE]            Specify the source dotenv file (Optional) (default: current-folder-path/.env.example)
     --dest[=DESTINATION]      Specify the destination dotenv file (Optional) (default: current-folder-path/.env)
+    --no-interaction          Avoid all kind of user interactions. Default action is to syncing by copying all parameters with their default values (Optional)
+```
+
+if you are in a standard environment and you have .env.example and .env inside the root project folder you can just execute the following command to sync .env.example and .env files:
+```
+./vendor/bin/phpdotenvsync --opt=sync
 ```
 
 for --src and --dest options you can use absolute and/or relative paths. If, for example, you have the files inside the current pwd folder but dotenv files have different filenames you can launch phpdotenvsync this way:
