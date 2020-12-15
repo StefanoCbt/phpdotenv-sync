@@ -41,6 +41,7 @@ $longOpts = [
     'opt:', // required (the requested operation) (list operations: OperationsStaticReference.php)
     'src::', // optional (the dotenv file source)
     'dest::', // optional (the dotenv file destination)
+    'no-interaction::', // optional (avoid all kind of user interactions)
 ];
 
 $options = getopt(null, $longOpts);
@@ -67,6 +68,14 @@ if (!empty($options['src'])) {
 }
 if (!empty($options['dest'])) {
     $dest = $options['dest'];
+}
+
+/**
+ * checking for --no-interaction option
+ */
+$noInteraction = false;
+if (isset($options['no-interaction'])) {
+    $noInteraction = true;
 }
 
 /**
@@ -125,7 +134,10 @@ switch ($options['opt']) {
             /**
              * asking action
              */
-            $action = CommandExecutorService::askForDotenvParam($missingParamName, $missingParamValue);
+            $action = CommandExecutorService::ASK_DOTENV_PARAM_ACTION_COPY_DEFAULT_VALUE;
+            if (!$noInteraction) {
+                $action = CommandExecutorService::askForDotenvParam($missingParamName, $missingParamValue);
+            }
 
             if (!$action || $action == CommandExecutorService::ASK_DOTENV_PARAM_ACTION_SKIP) {
                 continue;
@@ -141,7 +153,7 @@ switch ($options['opt']) {
                         $missingParamValue,
                         $dest
                     );
-                    CliColoredMessagesService::success('Added.');
+                    CliColoredMessagesService::success('Added (' . $missingParamName . ').');
                     break;
                 case (CommandExecutorService::ASK_DOTENV_PARAM_ACTION_CHANGE_DEFAULT_VALUE):
                     $newValue = CommandExecutorService::askForNewDotenvValue();
@@ -150,14 +162,13 @@ switch ($options['opt']) {
                         $newValue,
                         $dest
                     );
-                    CliColoredMessagesService::success('Added with specified value.');
+                    CliColoredMessagesService::success('Added with specified value (' . $missingParamName . ').');
                     break;
             }
 
             echo PHP_EOL;
         }
 
-        echo PHP_EOL;
         CliColoredMessagesService::success('Sync completed.');
         break;
     default:
