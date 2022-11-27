@@ -37,6 +37,8 @@ use Stefanocbt\PhpdotenvSync\Services\CommandExecutorService;
 /**
  * Setting command arguments/options
  */
+$shortOpts = ''; // unused but required to be set to avoid: PHP Deprecated: getopt(): Passing null to parameter #1 ($short_options) of type string is deprecated in bin/phpdotenvsync
+
 $longOpts = [
     'opt:', // required (the requested operation) (list operations: OperationsStaticReference.php)
     'src::', // optional (the dotenv file source)
@@ -44,7 +46,7 @@ $longOpts = [
     'no-interaction::', // optional (avoid all kind of user interactions)
 ];
 
-$options = getopt(null, $longOpts);
+$options = getopt($shortOpts, $longOpts);
 
 /**
  * validating options
@@ -53,8 +55,8 @@ if (empty($options)) {
     CliColoredMessagesService::danger('invalid options provided.');
     exit;
 }
-if (!in_array($options['opt'], OperationsStaticReference::OPT_DOTENV_REFERENCES)) {
-    CliColoredMessagesService::danger('the requested opt does not exists.');
+if (empty($options['opt']) || !in_array($options['opt'], OperationsStaticReference::OPT_DOTENV_REFERENCES)) {
+    CliColoredMessagesService::danger('the requested opt does not exists or it is invalid.');
     exit;
 }
 
