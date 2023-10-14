@@ -63,8 +63,9 @@ if (empty($options['opt']) || !in_array($options['opt'], OperationsStaticReferen
 /**
  * setting src & dest parameters
  */
-$src = $_SERVER['PWD'] . '/.env.example';
-$dest = $_SERVER['PWD'] . '/.env';
+$src = getcwd() . '/.env.example';
+$dest = getcwd() . '/.env';
+
 if (!empty($options['src'])) {
     $src = $options['src'];
 }
