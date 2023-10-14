@@ -1,4 +1,4 @@
 parameters:
     reportUnmatchedIgnoredErrors: false
     ignoreErrors:
-        - '#PUT HERE SOME ERRORS TO IGNORE(.)+#'
+        - '#PUT HERE SOME ERRORS TO IGNOREE(.)+#'
